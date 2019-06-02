@@ -1,0 +1,937 @@
+TypeScript
+
+A typed superset of JavaScript
+
+May 21 2019
+
+Wen-Zhe Liu
+
+* Introduction
+
+* What's TypeScript
+TypeScript is a typed superset of JavaScript that compiles to plain JavaScript.
+.image superset.jpg
+
+* TypeScript
+Start with JavaScript
+
+- All JavaScript code is TypeScript Code, simple copy and paste.
+- All JavaScript libraries work with TypeScript
+
+Optional Static Types, Classes, Modules
+
+- Enable scalable application development and excellent tooling
+- Zero cost: Static types completely disappear at run-time
+
+Ends with JavaScript
+
+- Compiles to idiomatic JavaScript
+- Runs in any browser or host, on any OS
+
+* Pros and Cons
+Pros
+
+- Type check in compile time
+- Better readable
+- Better IDE support
+- Easier to maintain, especially for big project
+- Compatible to JavaScript (just change ext name from .js to .ts can work)
+- JavaScript's 3rd-party library is also TypeScript's 3rd-party library
+- Easy to learn by Java/C++/ES6 background as syntax is very similar to Java
+
+Cons
+
+- Not easy to learn by ES5 background as TS has type/interface/generic/enum.
+- Cannot run directly in web browser (need to compile to js first)
+
+* Come from
+Open sourced and maintained by Microsoft
+
+Father of TypeScript: [[https://github.com/ahejlsberg][Anders Hejlsberg]]
+
+- Also the Father of Delphi and C#
+- Author of Turbo Pascal and Turbo C
+- Microsoft Technical Fellow
+.image author.jpeg _ 600
+
+* Become popular
+In the year 2019, the top 4 that most software engineers want to learn: 
+
+- Go, Kotlin, Python, TypeScript
+.image top.png 460 _
+
+* Application
+- [[https://segmentfault.com/a/1190000010892897?utm_source=tag-newest][Angular]]: has re-written by TypeScript from Angular 2
+- [[https://cn.vuejs.org/v2/guide/typescript.html][Vue]]: official support, next version (Vue 3) will be re-written by TypeScript
+- [[https://reactjs.org/docs/static-type-checking.html#typescript][React]]: official support TypeScript (.tsx)
+- [[https://github.com/Microsoft/TypeScript-React-Native-Starter#typescript-react-native-starter][React Native]]: official support TypeScript
+- [[https://github.com/Microsoft/TypeScript-Node-Starter#typescript-node-starter][Node.js]]: official support TypeScript
+- [[https://github.com/Microsoft/TypeScript-WeChat-Starter][WebChat app]]: official support TypeScript
+
+* Talk is cheap, show me the code
+	class Student {
+	    fullName: string;
+	    constructor(public firstName: string, public middleInitial: string, public lastName: string) {
+	        this.fullName = `${firstName} ${middleInitial} ${lastName}`;
+	    }
+	}
+	interface Person {  // ducking type (data member level): Student doesn't have to implement it
+	    firstName: string;
+	    lastName: string;
+	}
+	function greeter(person: Person) {
+	    return `Hello, ${person.firstName} ${person.lastName}`;
+	}
+
+	const user = new Student("Wen", "Zhe", "Liu");
+
+	document.body.innerHTML = `Full name: ${user.fullName}
+	Greet: ${ greeter(user) }`.replace('\n', '<br>');
+.link http://www.typescriptlang.org/play/index.html#src=class%20Student%20%7B%0A%20%20%20%20fullName%3A%20string%3B%0A%20%20%20%20constructor(public%20firstName%3A%20string%2C%20public%20middleInitial%3A%20string%2C%20public%20lastName%3A%20string)%20%7B%0A%20%20%20%20%20%20%20%20this.fullName%20%3D%20%60%24%7BfirstName%7D%20%24%7BmiddleInitial%7D%20%24%7BlastName%7D%60%3B%0A%20%20%20%20%7D%0A%7D%0Ainterface%20Person%20%7B%20%20%2F%2F%20ducking%20type%20(data%20member%20level)%3A%20Student%20doesn't%20have%20to%20implement%20it%0A%20%20%20%20firstName%3A%20string%3B%0A%20%20%20%20lastName%3A%20string%3B%0A%7D%0Afunction%20greeter(person%3A%20Person)%20%7B%0A%20%20%20%20return%20%60Hello%2C%20%24%7Bperson.firstName%7D%20%24%7Bperson.lastName%7D%60%3B%0A%7D%0A%0Aconst%20user%20%3D%20new%20Student(%22Wen%22%2C%20%22Zhe%22%2C%20%22Liu%22)%3B%0A%0Adocument.body.innerHTML%20%3D%20%60Full%20name%3A%20%24%7Buser.fullName%7D%0AGreet%3A%20%24%7B%20greeter(user)%20%7D%60.replace('%5Cn'%2C%20'%3Cbr%3E')%3B%0A Build and Run
+
+tsc xxx.ts ==> xxx.js
+
+* Basic Types
+
+* Basic Types
+- boolean
+	let isDone: boolean = false;
+- number
+	let decimal: number = 6;
+	let hex: number = 0xf00d;
+	let v: number = 3.14;
+- string
+	let color: string = "blue";
+	let age: number = 37;
+	let sentence: string = `Hello, I love color ${color}.
+	I'll be ${ age + 1 } years old next month.`;
+* Basic Types: Array and Tuple
+- Array
+	let list1: number[] = [1, 2, 3];
+	let list2: Array<number> = [1, 2, 3];  // the same with number[]
+- Readonly array
+	let list3: ReadonlyArray<number> = [1, 2, 3];
+	list3[0] = 5; // error
+	list3.push(6); // error
+	list3.length = 10; // error
+	list2 = list3; // error
+	list2 = list3 as number[];  // pass (use as to cast type)
+
+- Tuple
+	let x: [string, number] = ["hello", 10]; // OK
+	x = [10, "hello"]; // Error
+	console.log(x[0].substr(1)); // OK
+	console.log(x[1].substr(1)); // Error, 'number' does not have 'substr'
+* Basic Types: enum
+- enum
+	enum Color {Red, Green, Blue}  // 0, 1, 2
+	let c: Color = Color.Green;  // c = 1
+
+	enum Color {Red = 1, Green, Blue} // 1, 2, 3
+	let c: Color = Color2.Green; // c = 2
+
+	enum Color {Red = 1, Green = 2, Blue = 4}
+	let c: Color = Color.Green;
+	let colorName: string = Color[2]; // reverse mapping: Displays 'Green' as its value is 2
+
+	enum BooleanLikeHeterogeneousEnum {  // mixed types
+	    No = 0,
+	    Yes = "YES",
+	}
+	enum FileAccess {      // computed member
+	    Read    = 1 << 1,
+	    Write   = 1 << 2,
+	    ReadWrite  = Read | Write,
+	    G = "123".length            
+	}
+
+
+* Basic Types: any and void
+- any
+	let notSure: any = 4;
+	notSure = "maybe a string instead";
+	notSure = false; // okay, definitely a boolean
+
+	let notSure: any = 4;
+	notSure.ifItExists(); // okay, ifItExists might exist at runtime
+	notSure.toFixed(); // okay, toFixed exists (but the compiler doesn't check)
+
+	let prettySure: Object = 4;
+	prettySure.toFixed(); // Error: Property 'toFixed' doesn't exist on type 'Object'.
+
+	let list: any[] = [1, true, "free"];
+	list[1] = 100;
+- void
+	function warnUser(): void {
+	    console.log("This is my warning message");
+	}
+	let unusable: void = undefined; // can only assign undefined or null
+
+* Basic Types: null and undefined
+- Null and Undefined
+	// Not much else we can assign to these variables!
+	let u: undefined = undefined;
+	let n: null = null;
+when using `--strictNullChecks` flag, null and undefined are only assignable to void and their respective types.
+
+This helps avoid many common errors. 
+
+In cases where you want to pass in either a string or null or undefined, you can use the union type `string | null | undefined`.
+
+	let s = "foo";
+	s = null; // error, 'null' is not assignable to 'string'
+	let sn: string | null = "bar";
+	sn = null; // ok
+
+	sn = undefined; // error, 'undefined' is not assignable to 'string | null'
+
+* Type assertions
+- “angle-bracket” syntax
+
+	let someValue: any = "this is a string";
+	let strLength: number = (<string>someValue).length;  // not work in .tsx file (react)
+
+- as-syntax
+
+	let someValue: any = "this is a string";
+	let strLength: number = (someValue as string).length; // can work in all environments
+
+* Variable Declarations
+
+* Variable Declarations: var (before ES6)
+- function-scoping
+
+	function f(shouldInitialize: boolean) {
+	    if (shouldInitialize) {
+	        var x = 10;
+	    }
+	    return x;
+	}
+	f(true);  // returns '10'
+	f(false); // returns 'undefined'
+
+- the inner for-loop overwrite the variable i is function-scoped
+
+	function sumMatrix(matrix: number[][]) {
+	    var sum = 0;
+	    for (var i = 0; i < matrix.length; i++) {
+	        var currentRow = matrix[i];
+	        for (var i = 0; i < currentRow.length; i++) {
+	            sum += currentRow[i];
+	        }
+	    }
+	    return sum;
+	}
+* Variable Declarations: var (cont...)
+- Variable capturing quirks
+	for (var i = 0; i < 10; i++) {
+	    setTimeout(function() { console.log(i); }, 100 * i);
+	}
+Output:
+
+	10
+	10
+	10
+	10
+	10
+	10
+	10
+	10
+	10
+	10
+* Variable Declarations: let (ES6)
+- Block-scoping
+	a++; // illegal to use 'a' before it's declared;
+	let a;
+	function f(input: boolean) {
+	    let a = 100;
+	    if (input) {
+	        // Still okay to reference 'a'
+	        let b = a + 1;
+	        return b;
+	    }
+	    // Error: 'b' doesn't exist here
+	    return b;
+	}
+* Variable Declarations: let (ES6) (cont...)
+- Re-declarations and Shadowing
+	let x = 10;
+	let x = 20; // error: can't re-declare 'x' in the same scope
+	function f(x) {
+	    let x = 100; // error: interferes with parameter declaration
+	}
+	function g() {
+	    let x = 100;
+	    var x = 100; // error: can't have both declarations of 'x'
+	}
+- the inner loop’s i shadows i from the outer loop
+	function sumMatrix(matrix: number[][]) {
+	    let sum = 0;
+	    for (let i = 0; i < matrix.length; i++) {
+	        var currentRow = matrix[i];
+	        for (let i = 0; i < currentRow.length; i++) {
+	            sum += currentRow[i];
+	        }
+	    }
+	    return sum;
+	}
+* Variable Declarations: let (ES6) (cont...)
+- Block-scoped variable capturing
+	for (let i = 0; i < 10 ; i++) {
+	    setTimeout(function() { console.log(i); }, 100 * i);
+	}
+Output:
+
+	0
+	1
+	2
+	3
+	4
+	5
+	6
+	7
+	8
+	9
+
+* Variable Declarations: const (ES6)
+	const numLivesForCat = 9;
+	numLivesForCat = 10; // Error
+	const kitty = {
+	    name: "Aurora",
+	    numLives: numLivesForCat,
+	}
+	// Error
+	kitty = {
+	    name: "Danielle",
+	    numLives: numLivesForCat
+	};
+
+	// all "okay"
+	kitty.name = "Rory";
+	kitty.name = "Kitty";
+	kitty.name = "Cat";
+	kitty.numLives--;
+
+.link https://en.wikipedia.org/wiki/Principle_of_least_privilege Principle of least privilege:
+- Use `const` as possible as you can
+- or else use `let`, never use `var`
+
+* Destructuring: Array destructuring
+- array destructuring assignment:
+	let input = [1, 2];
+	let [first, second] = input;  // first = 1, second = 2
+- parameters to a function
+	function f([first, second]: [number, number]) { ... }
+	f([1, 2]);
+- remaining items
+	let [first, ...rest] = [1, 2, 3, 4];
+	console.log(first); // outputs 1
+	console.log(rest); // outputs [ 2, 3, 4 ]
+- ignore elements
+	let [first] = [1, 2, 3, 4];
+	console.log(first); // outputs 1
+
+	let [, second, , fourth] = [1, 2, 3, 4];
+* Destructuring: Object destructuring
+- destructure objects
+	let o = {
+	    a: "foo",
+	    b: 12,
+	    c: "bar"
+	};
+	let { a, b } = o;
+- remaining items in an object using the syntax ...
+	let { a, ...passthrough } = o;
+	let total = passthrough.b + passthrough.c.length;
+- Property renaming
+	let { a: newName1, b: newName2 } = o; // newName1 = o.a, newName2 = o.b
+- Default values
+	function keepWholeObject(wholeObject: { a: string, b?: number }) {
+	    let { a, b = 1001 } = wholeObject;
+* Spread -- the opposite of destructuring
+- spread an array into another array
+	let first = [1, 2];
+	let second = [3, 4];
+	let bothPlus = [0, ...first, ...second, 5]; // [0, 1, 2, 3, 4, 5]
+- spread objects
+	let defaults = { food: "spicy", price: "$$", ambiance: "noisy" };
+	let search = { ...defaults, food: "rich" }; // { food: "rich", price: "$$", ambiance: "noisy" }
+Be careful the order: from left-to-right, 
+
+	let defaults = { food: "spicy", price: "$$", ambiance: "noisy" };
+	let search = { food: "rich", ...defaults }; // { food: "spicy", price: "$$", ambiance: "noisy" }
+the food property in defaults overwrites food: "rich"
+
+* Interface
+
+* Interface: ducking type (structural subtyping)
+	interface LabeledValue {
+	    label: string;
+	}
+
+	function printLabel(labeledObj: LabeledValue) {
+	    console.log(labeledObj.label);
+	}
+
+	let myObj = {size: 10, label: "Size 10 Object"};
+	printLabel(myObj);
+
+* Interface: Optional Properties
+“option bags” pattern: only has a couple of properties filled in.
+
+	interface SquareConfig {
+	    color?: string;
+	    width?: number;
+	}
+
+	function createSquare(config: SquareConfig): {color: string; area: number} {
+	    let newSquare = {color: "white", area: 100};
+	    if (config.color) {
+	        newSquare.color = config.color;
+	    }
+	    if (config.width) {
+	        newSquare.area = config.width * config.width;
+	    }
+	    return newSquare;
+	}
+
+	let mySquare = createSquare({color: "black"});
+
+* Interface: Readonly properties
+	interface Point {
+	    readonly x: number;
+	    readonly y: number;
+	}
+	let p1: Point = { x: 10, y: 20 };
+	p1.x = 5; // error!
+
+`readonly` vs `const`
+
+- variables use const
+- properties use readonly.
+
+* Interface: Excess Property Checks
+	interface SquareConfig {
+	    color?: string;
+	    width?: number;
+	}
+	function createSquare(config: SquareConfig): { color: string; area: number } { ... }
+- error: 'colour' not expected in type 'SquareConfig'
+	let mySquare = createSquare({ colour: "red", width: 100 });
+- pass by using "as" to cast to the interface
+	let mySquare = createSquare({ colour: "red", width: 100 } as SquareConfig);
+- pass by dynamic property
+	interface SquareConfig {
+	    color?: string;
+	    width?: number;
+	    [propName: string]: any;
+	}
+	let squareOptions = { colour: "red", width: 100 };
+	let mySquare = createSquare(squareOptions);  // pass
+
+* Interface: implemented by class
+	interface ClockInterface {
+	    currentTime: Date;
+	    setTime(d: Date): void;
+	}
+
+	class Clock implements ClockInterface {
+	    currentTime: Date = new Date();  // public by default
+	    setTime(d: Date) {               // public by default
+	        this.currentTime = d;
+	    }
+	    constructor(h: number, m: number) { }
+	}
+
+* Interface: Extending Interfaces
+An interface can extend multiple interfaces, creating a combination of all of the interfaces.
+
+	interface Shape {
+	    color: string;
+	}
+
+	interface PenStroke {
+	    penWidth: number;
+	}
+
+	interface Square extends Shape, PenStroke {
+	    sideLength: number;
+	}
+
+	let square = <Square>{};
+	square.color = "blue";
+	square.sideLength = 10;
+	square.penWidth = 5.0;
+
+* Class
+
+* Class
+	class Greeter {
+	    greeting: string;	// default is public
+	    constructor(message: string) {
+	        this.greeting = message;
+	    }
+	    greet() {	// default is public
+	        return "Hello, " + this.greeting;
+	    }
+	}
+
+	let greeter = new Greeter("world");
+* Class: Inheritance
+	class Animal {
+	    name: string;
+	    constructor(theName: string) { this.name = theName; }
+	    move(distanceInMeters: number = 0) {
+	        console.log(`${this.name} moved ${distanceInMeters}m.`);
+	    }
+	}
+	class Snake extends Animal {
+	    constructor(name: string) { super(name); } // like Java, super should be called first
+	    move(distanceInMeters = 5) {
+	        console.log("Slithering...");
+	        super.move(distanceInMeters);
+	}   }
+	class Horse extends Animal {
+	    constructor(name: string) { super(name); }
+	    move(distanceInMeters = 45) {
+	        console.log("Galloping...");
+	        super.move(distanceInMeters);
+	    }
+	}
+	let sam = new Snake("Sammy the Python");
+	let tom: Animal = new Horse("Tommy the Palomino");
+	sam.move();
+	tom.move(34);
+
+* Class: Public, private, and protected modifiers
+The same rule with Java, but default by public (no package-scope modifier)
+
+	class Person {
+	    protected name: string;
+	    protected constructor(theName: string) { this.name = theName; }
+	}
+
+	// Employee can extend Person
+	class Employee extends Person {
+	    private department: string;
+
+	    constructor(name: string, department: string) {  // public by default
+	        super(name);
+	        this.department = department;
+	    }
+
+	    public getElevatorPitch() {  // public can also explicit declare
+	        return `Hello, my name is ${this.name} and I work in ${this.department}.`;
+	    }
+	}
+
+	let howard = new Employee("Howard", "Sales");
+	let john = new Person("John"); // Error: The 'Person' constructor is protected
+
+* Class: Readonly modifier
+`readonly` is `final` in Java or `const` in C++
+
+	class Octopus {
+	    readonly name: string;
+	    readonly numberOfLegs: number = 8;
+	    constructor (theName: string) {
+	        this.name = theName;
+	    }
+	}
+	let dad = new Octopus("Man with the 8 strong legs");
+	dad.name = "Man with the 3-piece suit"; // error! name is readonly.
+
+* Class: Parameter properties
+	class Octopus {
+	    readonly numberOfLegs: number = 8;
+	    constructor(readonly name: string, public age: number, isMale: boolean) {
+	    }
+	}
+	const o = new Octopus("me", 2, false);
+	console.log(o.numberOfLegs);  // pass
+	console.log(o.name); // pass
+	console.log(o.age); // pass
+	console.log(o.isMale); // compile fail: no such field
+
+* Class: Static and Accessors
+	class Employee {
+		static passcode = "secret passcode"; // public static field
+	    private _fullName: string;
+
+	    get fullName(): string {
+	        return this._fullName;
+	    }
+
+	    set fullName(newName: string) {
+	        if (Employee.passcode == "secret passcode") { // use class name to visit static field
+	            this._fullName = newName;
+	        } else {
+	            console.log("Error: Unauthorized update of employee!");
+	        }
+	    }
+	}
+
+	let employee = new Employee();
+	employee.fullName = "Bob Smith"; // set fullName() method will be called
+	if (employee.fullName) {  // get fullName() method will be called
+	    console.log(employee.fullName);
+	}
+
+* Class: Abstract Classes
+	abstract class Department {
+	    constructor(public name: string) {}
+	    printName(): void {
+	        console.log("Department name: " + this.name);
+	    }
+	    abstract printMeeting(): void; // must be implemented in derived classes
+	}
+	class AccountingDepartment extends Department {
+	    constructor() {
+	        super("Accounting and Auditing"); // constructors in derived classes must call super()
+	    }
+	    printMeeting(): void {
+	        console.log("The Accounting Department meets each Monday at 10am.");
+	    }
+	    generateReports(): void {
+	        console.log("Generating accounting reports...");
+	    }
+	}
+	let department: Department; // ok to create a reference to an abstract type
+	department = new Department(); // error: cannot create an instance of an abstract class
+	department = new AccountingDepartment(); // ok to create and assign a non-abstract subclass
+	department.printName();
+	department.printMeeting();
+	department.generateReports(); // error: method doesn't exist on declared abstract type
+
+* Other Syntax
+
+* Function
+	function add(x: number, y: number): number {
+	    return x + y;
+	}
+
+	// lambda, inferring return typer
+	let myAdd = (x: number, y: number) => x + y;
+
+	add(1);  // build fail  (work in javascript)
+	add(1,2,3); // build fail (work in javascript)
+	add(1,2); // work exactly
+
+Rest Parameters
+
+	function buildName(firstName: string, ...restOfName: string[]) {
+	    return firstName + " " + restOfName.join(" ");
+	}
+
+	// employeeName will be "Joseph Samuel Lucas MacKinzie"
+	let employeeName = buildName("Joseph", "Samuel", "Lucas", "MacKinzie");
+
+	buildName(); // fail to compile (work in javascript)
+	buildName("Joseph"); // pass, return "Joseph "
+
+* Function: Optional and Default Parameters
+
+Option param by `?`
+
+	function buildName(firstName: string, lastName?: string) {
+	    if (lastName)
+	        return firstName + " " + lastName;
+	    else
+	        return firstName;
+	}
+	let result1 = buildName("Bob");        // works correctly now, lastName will be undefined
+	let result2 = buildName("Bob", "Adams", "Sr.");  // error, too many parameters
+	let result3 = buildName("Bob", "Adams");         // ah, just right
+
+Default param
+
+	function buildName(firstName: string, lastName = "Smith") {
+	    return firstName + " " + lastName;
+	}
+
+	let result1 = buildName("Bob");                  // works correctly now, returns "Bob Smith"
+	let result2 = buildName("Bob", undefined);       // still works, also returns "Bob Smith"
+	let result3 = buildName("Bob", "Adams", "Sr.");  // error, too many parameters
+	let result4 = buildName("Bob", "Adams");         // ah, just right
+
+* Generics
+- Generic Function
+	function identity<T>(arg: T): T {
+	    console.log(arg.length);  // Error: T doesn't have .length
+	    return arg;
+	}
+	let output = identity<string>("myString");  // type of output will be 'string'
+	let output = identity("myString");  // type of output will be 'string'
+- Generic Class
+	class GenericNumber<T> {
+	    zeroValue: T;
+	    add: (x: T, y: T) => T;
+	}
+	let myGenericNumber = new GenericNumber<number>();
+	myGenericNumber.zeroValue = 0;
+	myGenericNumber.add = function(x, y) { return x + y; };
+* Generics: Constraints
+	interface Lengthwise {
+	    length: number;
+	}
+	function loggingIdentity<T extends Lengthwise>(arg: T): T {
+	    console.log(arg.length);  // Now we know it has a .length property, so no more error
+	    return arg;
+	}
+	loggingIdentity(3);  // Error, number doesn't have a .length property
+	loggingIdentity({length: 10, value: 3}); // pass
+
+	function getProperty<T, K extends keyof T>(obj: T, key: K) {
+	    return obj[key];
+	}
+
+	let x = { a: 1, b: 2, c: 3, d: 4 };
+
+	getProperty(x, "a"); // okay
+	getProperty(x, "m"); // error: Argument of type 'm' isn't assignable to 'a' | 'b' | 'c' | 'd'.
+
+* Generics: Using Class Types in Generics
+When creating factories in TypeScript using generics, it is necessary to refer to class types by their constructor functions. 
+
+	class BeeKeeper {
+	    hasMask: boolean;
+	}
+	class ZooKeeper {
+	    nametag: string;
+	}
+	class Animal {
+	    numLegs: number;
+	}
+	class Bee extends Animal {
+	    keeper: BeeKeeper;
+	}
+	class Lion extends Animal {
+	    keeper: ZooKeeper;
+	}
+	function createInstance<A extends Animal>(c: new () => A): A {
+	    return new c();
+	}
+	createInstance(Lion).keeper.nametag;  // typechecks!
+	createInstance(Bee).keeper.hasMask;   // typechecks!
+
+* Union Type
+	function padLeft(value: string, padding: string | number) {
+	    if (typeof padding === "number") {
+	        return Array(padding + 1).join(" ") + value;  // padding auto cast to number
+	    } else if (typeof padding === "string") {
+	        return padding + value;          // padding auto cast to string
+	    } else throw new Error(`Expected string or number, got '${padding}'.`);
+	}
+	let indentedString = padLeft("Hello world", true); // errors during compilation
+- only access members that are common to all types in the union
+	interface Bird {
+	    fly();
+	    layEggs();
+	}
+	interface Fish {
+	    swim();
+	    layEggs();
+	}
+	function getSmallPet(): Fish | Bird { ... }
+	let pet = getSmallPet();
+	pet.layEggs(); // okay
+	pet.swim();    // errors
+	(pet as Fish).swim(); // pass
+
+* Iterators
+for..of (new feature in ES6) vs. for..in statements
+
+- for..in returns a list of keys on the object being iterated
+- for..of returns a list of values
+
+	let list = [4, 5, 6];
+	for (let i in list) {
+	   console.log(i); // 0, 1, 2,
+	}
+	for (let i of list) {
+	   console.log(i); // 4, 5, 6
+	}
+
+	let pets = new Set(["Cat", "Dog", "Hamster"]);
+	pets["species"] = "mammals";  // meta data
+	for (let pet in pets) {
+	   console.log(pet); // "species"
+	}
+	for (let pet of pets) {
+	    console.log(pet); // "Cat", "Dog", "Hamster"
+	}
+
+* Modules (new feature in ES6): Export and Import
+Export: only export can be visit outside the .js/.ts file
+
+	export interface StringValidator {  // Exporting a declaration
+	    isAcceptable(s: string): boolean;
+	}
+	export const numberRegexp = /^[0-9]+$/; // Export variable
+	class ZipCodeValidator { ... }
+	export ZipCodeValidator; // Export statements
+	// Export original validator but rename it
+	export {ZipCodeValidator as RegExpBasedZipCodeValidator} from "./ZipCodeValidator";
+	export * from "./StringValidator"; // exports interface 'StringValidator'; // re-export all
+
+Import
+
+	import { ZipCodeValidator } from "./ZipCodeValidator";  // import from file
+	let myValidator = new ZipCodeValidator();
+	import { ZipCodeValidator as ZCV } from "./ZipCodeValidator"; // import rename
+	let myValidator = new ZCV();
+	import * as validator from "./ZipCodeValidator"; // import entire module
+	let myValidator = new validator.ZipCodeValidator();
+
+* Modules: Default exports
+
+ZipCodeValidator.ts
+
+	export default class ZipCodeValidator { isAcceptable(s: string) { ... } }
+
+Test.ts
+
+	import validator from "./ZipCodeValidator"; // validator can be any string you want
+	const v = new validator();  // validator will be alias to ZipCodeValidator
+	v.isAcceptable("xxx");
+
+* TypeScript in Angular
+
+* TypeScript in Angular
+.link https://blog.csdn.net/liuwenzhe2008/article/details/79125406 Learn Angular from Java's viewpoint
+.iframe https://blog.csdn.net/liuwenzhe2008/article/details/79125406 560 1030
+
+* TypeScript in Vue
+
+* Create Vue + TypeScript project
+install vue-cli-3
+
+	$ yarn global add @vue/cli
+
+create project (named frontendts) by vue cli 3 with typescript, vuex, yarn, jest.
+
+	$ vue create frontendts
+	Vue CLI v3.0.1
+	? Please pick a preset: Manually select features
+	? Check the features needed for your project: Babel, TS, Router, Vuex, CSS Pre-processors, Linter, Unit
+	? Use class-style component syntax? Yes
+	? Use Babel alongside TypeScript for auto-detected polyfills? Yes
+	? Use history mode for router? (Requires proper server setup for index fallback in production) No
+	? Pick a CSS pre-processor (PostCSS, Autoprefixer and CSS Modules are supported by default): SCSS/SASS
+	? Pick a linter / formatter config: TSLint
+	? Pick additional lint features: Lint on save
+	? Pick a unit testing solution: Jest
+	? Where do you prefer placing config for Babel, PostCSS, ESLint, etc.? In package.json
+	? Save this as a preset for future projects? No
+	? Pick the package manager to use when installing dependencies: Yarn
+
+	Vue CLI v3.0.1
+	✨  Creating project in C:\code\wenzhe\TramWebView\frontendts.
+
+* Vue project structure that generated
+
+	├── package.json                 # dependency management
+	├── public                       # public static resources
+	│   ├── index.html
+	├── README.md
+	├── src
+	│   ├── App.vue                  # vue root componment
+	│   ├── assets                   # static assets (will be built to random file name)
+	│   ├── components               # vue components
+	│   │   ├── HelloWorld.vue
+	│   ├── main.ts                  # main entry
+	│   ├── router.ts                # router definition
+	│   ├── shims-tsx.d.ts           # tsx support
+	│   ├── shims-vue.d.ts           # vue TypeScript support
+	│   ├── store                    # vuex folder for managing state
+	│   │   ├── index.ts
+	│   ├── styles                   # global css
+	│   │   ├── index.scss
+	│   ├── types.d.ts               # type declare, use for some js lib that missing type
+	├── tests                        # unit test
+	│   └── unit
+	│       └── HelloWorld.spec.ts
+	├── tsconfig.json                # TypeScript configure
+	├── tslint.json                  # TypeScript Lint
+	├── vue.config.js                # Vue configure
+	└── yarn.lock                    # Yarn lock
+
+* Add 3'rd party js libraries
+
+Most js libraries have provided type declaration.
+
+	$ yarn add element-ui
+	$ yarn add echarts
+	$ yarn add -D @types/echarts  // add type of echarts
+	$ yarn add axios
+	$ yarn add moment
+	$ yarn add json2csv
+	$ yarn add -D @types/json2csv   // add type of json2csv
+	$ yarn add lodash
+	$ yarn add -D @types/lodash   // add type of lodash
+	$ yarn add vuex-class
+	$ yarn add vuex-persist
+	$ yarn add viz.js
+
+If a js lib doesn't provided type declaration, we can search from [[https://microsoft.github.io/TypeSearch][Microsoft TypeSearch]].
+If cannot find in Microsoft TypeSearch, declare type in `types.d.ts` file:
+
+	declare module 'viz.js';
+	declare module 'viz.js/full.render.js';
+
+* Vue file with JavaScript
+
+	<template> ... </template>
+	<style lang='scss' scoped> ... </style>
+	<script>
+	    import Hamburger from './Hamburger';
+	    import FilterRange from './FilterRange';
+	    export default {
+	        name: 'SummaryHeader',
+	        components: { Hamburger, FilterRange },
+	        props: { isLoading: { type: Boolean, default: true } },
+	        data: { return { models: '' } },
+	        computed: {
+	            sidebarLocked() { return this.$store.getters.sidebarLocked; },
+	            titleTip() { ... },
+	        },
+	        watch: { models(value, old) { ... } },
+	        methods: {
+	            showSidebar(v) { this.$store.dispatch(Cmd.SHOW_SIDEBAR); },
+	            emitChange(evt) { ... ; this.$emit('change', evt); },
+	            format(model) { ... },
+	        },
+	        mounted() { ... },
+	        destroyed() { ... },
+	    }
+	</script>
+
+* Vue file with TypeScript
+
+	<template> ... </template>
+	<style lang='scss' scoped> ... </style>
+	<script lang='ts'>
+	    import {Component, Vue, Emit, Prop, Watch} from 'vue-property-decorator';
+	    import {Getter, Action} from 'vuex-class';
+	    import {Cmd, DateRangeModel} from '../../store/frame';
+	    import Hamburger from './Hamburger.vue';
+	    import FilterRange from './FilterRange.vue';
+	    @Component({
+	        components: { Hamburger, FilterRange },
+	    })
+	    export default class SummaryHeader extends Vue {
+	        private models: string = '';
+	        @Prop({default: true}) protected isLoading !: boolean;
+	        @Getter(Cmd.SIDEBAR_LOCKED) protected sidebarLocked !: boolean;
+	        @Action(Cmd.SHOW_SIDEBAR) protected showSidebar !: (v: boolean) => void;
+	        @Emit('change') protected emitChange(evt: DateRangeModel): void { ... }
+	        @Watch('models') modelsChange(value: string, old: string): void { ... }
+	        get titleTip(): string { ... }
+	        private format(model: DateRangeModel): string { ... }
+	        mounted(): void { ... }
+	        destroyed(): void { ... }
+	    }
+	</script>
+
+
+
